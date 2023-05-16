@@ -24,16 +24,22 @@ export default {
   },
   methods: {
     async getAnswer() {
-      this.answer = "Thinking...";
-      const res = await fetch("https://yesno.wtf/api");
-      const { answer, image } = await res.json();
-      this.answer = answer;
-      this.image = image;
+      try {
+        this.answer = "Thinking...";
+        const res = await fetch("https://yesno.wtf/api");
+        const { answer, image } = await res.json();
+        this.answer = answer;
+        this.image = image;
+      } catch (error) {
+        this.answer = "Could not load the image";
+        this.image = null;
+      }
     },
   },
   watch: {
     question(newQuestion, oldQuestion) {
       this.isValidQuestion = false;
+      console.log(newQuestion, oldQuestion);
       if (!newQuestion.includes("?")) return;
       this.isValidQuestion = true;
       this.getAnswer();
